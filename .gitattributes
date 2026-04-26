@@ -1,0 +1,29 @@
+# Normalise all text files to LF in the repository.
+# Git will convert to CRLF on checkout on Windows (if core.autocrlf=true),
+# but the repo always stores LF — so Linux CI never sees Windows line endings.
+
+* text=auto eol=lf
+
+# Source files — always LF
+*.cpp   text eol=lf
+*.h     text eol=lf
+*.hpp   text eol=lf
+*.c     text eol=lf
+
+# Build / config files — always LF
+CMakeLists.txt  text eol=lf
+*.cmake         text eol=lf
+*.yml           text eol=lf
+*.yaml          text eol=lf
+*.md            text eol=lf
+*.gitignore     text eol=lf
+*.gitattributes text eol=lf
+*.nova          text eol=lf
+
+# Binary files — never touch line endings
+*.exe   binary
+*.o     binary
+*.a     binary
+*.lib   binary
+*.png   binary
+*.jpg   binary
