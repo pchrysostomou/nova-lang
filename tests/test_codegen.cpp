@@ -433,6 +433,49 @@ print(count)
     check("3x3 = 9", run(code) == "9\n");
 }
 
+// ── else if ───────────────────────────────────────────────────────────────────
+
+void test_else_if() {
+    std::cout << "\n[Else if — basic chain]\n";
+
+    std::string grade = R"(
+fn grade(n: int) -> string {
+    if (n >= 90) { return "A" }
+    else if (n >= 80) { return "B" }
+    else if (n >= 70) { return "C" }
+    else if (n >= 60) { return "D" }
+    else { return "F" }
+}
+print(grade(95))
+print(grade(85))
+print(grade(75))
+print(grade(65))
+print(grade(55))
+)";
+    check("grade chain", run(grade) == "A\nB\nC\nD\nF\n");
+
+    std::string sign = R"(
+fn sign(n: int) -> string {
+    if (n > 0) { return "positive" }
+    else if (n < 0) { return "negative" }
+    else { return "zero" }
+}
+print(sign(5))
+print(sign(-3))
+print(sign(0))
+)";
+    check("sign(5)",  run(sign) == "positive\nnegative\nzero\n");
+
+    // else if with no final else — only matching branch prints
+    std::string noelse = R"(
+let x = 2
+if (x == 1) { print("one") }
+else if (x == 2) { print("two") }
+else if (x == 3) { print("three") }
+)";
+    check("else if no final else", run(noelse) == "two\n");
+}
+
 // ── Full blueprint program ─────────────────────────────────────────────────────
 
 void test_full_blueprint() {
@@ -485,6 +528,7 @@ int main() {
     test_for_sum();
     test_for_in_function();
     test_for_nested();
+    test_else_if();
     test_full_blueprint();
 
     std::cout << "\n═══════════════════════════\n";

@@ -183,7 +183,9 @@ NodePtr Parser::parseReturnStmt() {
     return std::make_unique<ReturnStmt>(std::move(value), ln);
 }
 
+// if (cond) { body }
 // if (cond) { body } else { body }
+// if (cond) { body } else if (cond) { body } ...
 NodePtr Parser::parseIfStmt() {
     int ln = current().line;
     expect(TokenType::IF);
@@ -195,7 +197,12 @@ NodePtr Parser::parseIfStmt() {
 
     NodeList elseBody;
     if (match(TokenType::ELSE)) {
-        elseBody = parseBlock();
+        if (check(TokenType::IF)) {
+            // else if — the nested IfStmt becomes the sole statement in elseBody
+            elseBody.push_back(parseIfStmt());
+        } else {
+            elseBody = parseBlock();
+        }
     }
 
     return std::make_unique<IfStmt>(std::move(cond),
