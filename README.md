@@ -4,7 +4,6 @@
 ![Tests](https://img.shields.io/badge/tests-294%2F294-brightgreen)
 ![Language](https://img.shields.io/badge/language-C%2B%2B20-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)
-![License](https://img.shields.io/badge/license-MIT-orange)
 
 A complete compiled programming language built from scratch in C++20 — no external dependencies, no LLVM, no magic. Every phase hand-written: tokenizer, parser, import resolver, semantic analyzer, bytecode compiler, and virtual machine.
 
