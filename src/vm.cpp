@@ -126,6 +126,10 @@ Value VM::applyBinaryOp(Op op, Value a, Value b) {
             if (b.num == 0) throw std::runtime_error("VM: division by zero");
             return anyFloat ? Value::Float(a.num / b.num)
                             : Value::Int((long long)a.num / (long long)b.num);
+        case Op::MOD:
+            if (b.num == 0) throw std::runtime_error("VM: modulo by zero");
+            return anyFloat ? Value::Float(std::fmod(a.num, b.num))
+                            : Value::Int((long long)a.num % (long long)b.num);
         case Op::EQ:
             if (a.type == ValueType::String)  return Value::Bool(a.str == b.str);
             if (a.type == ValueType::Bool)    return Value::Bool(a.boolean == b.boolean);
@@ -186,7 +190,7 @@ void VM::run() {
                 break;
             }
 
-            case Op::ADD: case Op::SUB: case Op::MUL: case Op::DIV:
+            case Op::ADD: case Op::SUB: case Op::MUL: case Op::DIV: case Op::MOD:
             case Op::EQ:  case Op::NEQ: case Op::LT:  case Op::GT:
             case Op::LEQ: case Op::GEQ: {
                 Value b = pop(), a = pop();

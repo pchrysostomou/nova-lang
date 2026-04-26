@@ -66,6 +66,7 @@ private:
     void        visitReturnStmt(ReturnStmt* node);
     void        visitIfStmt(IfStmt* node);
     void        visitWhileStmt(WhileStmt* node);
+    void        visitForStmt(ForStmt* node);
     void        visitExprStmt(ExprStmt* node);
 
     // Επιστρέφει τον τύπο μιας έκφρασης (και ελέγχει σφάλματα εσωτερικά)

@@ -298,6 +298,141 @@ print(addBase(5))
     check("5 + 100 = 105", run(code) == "105\n");
 }
 
+// ── Modulo operator ───────────────────────────────────────────────────────────
+
+void test_modulo() {
+    std::cout << "\n[Modulo — basic]\n";
+    check("10 % 3 = 1",  run("print(10 % 3)")  == "1\n");
+    check("15 % 5 = 0",  run("print(15 % 5)")  == "0\n");
+    check("7 % 2 = 1",   run("print(7 % 2)")   == "1\n");
+    check("100 % 7 = 2", run("print(100 % 7)") == "2\n");
+}
+
+void test_modulo_in_function() {
+    std::cout << "\n[Modulo — in function / fizzbuzz]\n";
+    std::string code = R"(
+fn isEven(n: int) -> bool {
+    return n % 2 == 0
+}
+print(isEven(4))
+print(isEven(7))
+)";
+    check("4 is even",   run(code) == "true\nfalse\n");
+
+    std::string fizz = R"(
+fn fizzbuzz(n: int) {
+    let i = 1
+    while (i <= n) {
+        if (i % 15 == 0) { print("FizzBuzz") }
+        else {
+            if (i % 3 == 0) { print("Fizz") }
+            else {
+                if (i % 5 == 0) { print("Buzz") }
+                else { print(i) }
+            }
+        }
+        i = i + 1
+    }
+}
+fizzbuzz(15)
+)";
+    std::string expected =
+        "1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz\n";
+    check("fizzbuzz(15)", run(fizz) == expected);
+}
+
+// ── String concatenation ──────────────────────────────────────────────────────
+
+void test_string_concat() {
+    std::cout << "\n[String — concatenation]\n";
+    check("hello + world",
+          run(R"(print("hello" + " world"))") == "hello world\n");
+    check("three parts",
+          run(R"(print("foo" + "bar" + "baz"))") == "foobarbaz\n");
+    check("empty + str",
+          run(R"(print("" + "abc"))") == "abc\n");
+    check("str + empty",
+          run(R"(print("abc" + ""))") == "abc\n");
+}
+
+void test_string_concat_in_function() {
+    std::cout << "\n[String — concat in function]\n";
+    std::string code = R"(
+fn greet(name: string) -> string {
+    return "Hello, " + name + "!"
+}
+print(greet("Nova"))
+print(greet("World"))
+)";
+    check("greet Nova",  run(code) == "Hello, Nova!\nHello, World!\n");
+
+    std::string code2 = R"(
+fn join(a: string, b: string) -> string {
+    return a + " " + b
+}
+let result = join("foo", "bar")
+print(result)
+)";
+    check("join foo bar", run(code2) == "foo bar\n");
+}
+
+// ── For loops ─────────────────────────────────────────────────────────────────
+
+void test_for_basic() {
+    std::cout << "\n[For — basic count]\n";
+    check("0..4",
+          run("for (let i = 0; i < 5; i = i + 1) { print(i) }")
+          == "0\n1\n2\n3\n4\n");
+}
+
+void test_for_zero_iterations() {
+    std::cout << "\n[For — condition false from start]\n";
+    check("no iters",
+          run("for (let i = 0; i < 0; i = i + 1) { print(i) }") == "");
+}
+
+void test_for_sum() {
+    std::cout << "\n[For — accumulate sum]\n";
+    std::string code = R"(
+let sum = 0
+for (let i = 1; i <= 10; i = i + 1) {
+    sum = sum + i
+}
+print(sum)
+)";
+    check("sum 1..10 = 55", run(code) == "55\n");
+}
+
+void test_for_in_function() {
+    std::cout << "\n[For — inside function]\n";
+    std::string code = R"(
+fn sumTo(n: int) -> int {
+    let s = 0
+    for (let i = 1; i <= n; i = i + 1) {
+        s = s + i
+    }
+    return s
+}
+print(sumTo(5))
+print(sumTo(100))
+)";
+    check("sumTo(5)=15, sumTo(100)=5050", run(code) == "15\n5050\n");
+}
+
+void test_for_nested() {
+    std::cout << "\n[For — nested loops]\n";
+    std::string code = R"(
+let count = 0
+for (let i = 0; i < 3; i = i + 1) {
+    for (let j = 0; j < 3; j = j + 1) {
+        count = count + 1
+    }
+}
+print(count)
+)";
+    check("3x3 = 9", run(code) == "9\n");
+}
+
 // ── Full blueprint program ─────────────────────────────────────────────────────
 
 void test_full_blueprint() {
@@ -341,6 +476,15 @@ int main() {
     test_while_sum();
     test_while_skipped();
     test_global_visibility();
+    test_modulo();
+    test_modulo_in_function();
+    test_string_concat();
+    test_string_concat_in_function();
+    test_for_basic();
+    test_for_zero_iterations();
+    test_for_sum();
+    test_for_in_function();
+    test_for_nested();
     test_full_blueprint();
 
     std::cout << "\n═══════════════════════════\n";

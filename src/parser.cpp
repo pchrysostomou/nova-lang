@@ -120,6 +120,7 @@ NodePtr Parser::parseStatement() {
         case TokenType::RETURN: return parseReturnStmt();
         case TokenType::IF:     return parseIfStmt();
         case TokenType::WHILE:  return parseWhileStmt();
+        case TokenType::FOR:    return parseForStmt();
         default:                return parseExprStmt();
     }
 }
@@ -213,6 +214,46 @@ NodePtr Parser::parseWhileStmt() {
     return std::make_unique<WhileStmt>(std::move(cond), std::move(body), ln);
 }
 
+// for (init; cond; update) { body }
+//   init   = let x = expr  |  expr  |  (empty)
+//   cond   = expr           |  (empty → true)
+//   update = expr           |  (empty)
+NodePtr Parser::parseForStmt() {
+    int ln = current().line;
+    expect(TokenType::FOR);
+    expect(TokenType::LPAREN);
+
+    // init
+    NodePtr init;
+    if (check(TokenType::LET)) {
+        init = parseVarDecl();           // parseVarDecl consumes its trailing ';'
+    } else if (check(TokenType::SEMICOLON)) {
+        consume();                       // empty init
+    } else {
+        auto expr = parseExpression();
+        expect(TokenType::SEMICOLON);
+        init = std::make_unique<ExprStmt>(std::move(expr), ln);
+    }
+
+    // condition
+    NodePtr cond;
+    if (!check(TokenType::SEMICOLON)) {
+        cond = parseExpression();
+    }
+    expect(TokenType::SEMICOLON);
+
+    // update
+    NodePtr update;
+    if (!check(TokenType::RPAREN)) {
+        update = parseExpression();
+    }
+    expect(TokenType::RPAREN);
+
+    auto body = parseBlock();
+    return std::make_unique<ForStmt>(std::move(init), std::move(cond),
+                                     std::move(update), std::move(body), ln);
+}
+
 // Έκφραση ως statement: add(3,5)  /  x = 42
 NodePtr Parser::parseExprStmt() {
     int ln = current().line;
@@ -293,7 +334,7 @@ NodePtr Parser::parseAddition() {
 NodePtr Parser::parseMultiplication() {
     auto left = parseUnary();
 
-    while (check(TokenType::STAR) || check(TokenType::SLASH)) {
+    while (check(TokenType::STAR) || check(TokenType::SLASH) || check(TokenType::PERCENT)) {
         auto op    = consume().value;
         auto right = parseUnary();
         int  ln    = left->line;

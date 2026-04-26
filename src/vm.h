@@ -42,7 +42,7 @@ enum class Op {
     STORE,
 
     // Αριθμητικές πράξεις (binary: pop b, pop a, push result)
-    ADD, SUB, MUL, DIV,
+    ADD, SUB, MUL, DIV, MOD,
     // Unary
     NEG,   // -x
     NOT,   // !x

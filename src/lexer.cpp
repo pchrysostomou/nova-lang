@@ -10,6 +10,7 @@ static const std::unordered_map<std::string, TokenType> KEYWORDS = {
     {"if",     TokenType::IF},
     {"else",   TokenType::ELSE},
     {"while",  TokenType::WHILE},
+    {"for",    TokenType::FOR},
     {"true",   TokenType::TRUE_KW},
     {"false",  TokenType::FALSE_KW},
 };
@@ -25,12 +26,14 @@ std::string tokenTypeToString(TokenType type) {
         case TokenType::IF:         return "IF";
         case TokenType::ELSE:       return "ELSE";
         case TokenType::WHILE:      return "WHILE";
+        case TokenType::FOR:        return "FOR";
         case TokenType::TRUE_KW:    return "TRUE";
         case TokenType::FALSE_KW:   return "FALSE";
         case TokenType::PLUS:       return "PLUS";
         case TokenType::MINUS:      return "MINUS";
         case TokenType::STAR:       return "STAR";
         case TokenType::SLASH:      return "SLASH";
+        case TokenType::PERCENT:    return "PERCENT";
         case TokenType::EQUALS:     return "EQUALS";
         case TokenType::EQEQ:       return "EQEQ";
         case TokenType::BANG:       return "BANG";
@@ -182,6 +185,7 @@ std::vector<Token> Lexer::tokenize() {
             case '+': tok.type = TokenType::PLUS;      tok.value = "+";  break;
             case '*': tok.type = TokenType::STAR;      tok.value = "*";  break;
             case '/': tok.type = TokenType::SLASH;     tok.value = "/";  break;
+            case '%': tok.type = TokenType::PERCENT;   tok.value = "%";  break;
             case '(': tok.type = TokenType::LPAREN;    tok.value = "(";  break;
             case ')': tok.type = TokenType::RPAREN;    tok.value = ")";  break;
             case '{': tok.type = TokenType::LBRACE;    tok.value = "{";  break;

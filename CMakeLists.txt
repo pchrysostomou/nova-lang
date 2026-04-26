@@ -21,6 +21,12 @@ add_library(nova_lib
     src/codegen.cpp
 )
 
+# ── Nova compiler executable
+add_executable(nova
+    src/main.cpp
+)
+target_link_libraries(nova nova_lib)
+
 # ── Test: Lexer
 add_executable(test_lexer
     tests/test_lexer.cpp

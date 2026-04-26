@@ -38,6 +38,7 @@ private:
     void genReturnStmt(ReturnStmt* node);
     void genIfStmt(IfStmt* node);
     void genWhileStmt(WhileStmt* node);
+    void genForStmt(ForStmt* node);
     void genExprStmt(ExprStmt* node);
 
     // ── Expression generators (κάθε μια αφήνει 1 value στο stack) ────────────

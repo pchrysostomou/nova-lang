@@ -25,6 +25,7 @@ enum class NodeKind {
     ReturnStmt,
     IfStmt,
     WhileStmt,
+    ForStmt,
     ExprStmt,
 
     // Δομή
@@ -166,6 +167,20 @@ struct WhileStmt : ASTNode {
     NodeList body;
     WhileStmt(NodePtr cond, NodeList body, int line = 0)
         : ASTNode(NodeKind::WhileStmt, line), condition(std::move(cond)),
+          body(std::move(body)) {}
+};
+
+// for (init; cond; update) { body }
+//   init   — VarDecl or ExprStmt (assignment), or nullptr
+//   update — Assignment expression, or nullptr
+struct ForStmt : ASTNode {
+    NodePtr  init;
+    NodePtr  condition;
+    NodePtr  update;
+    NodeList body;
+    ForStmt(NodePtr init, NodePtr cond, NodePtr update, NodeList body, int line = 0)
+        : ASTNode(NodeKind::ForStmt, line), init(std::move(init)),
+          condition(std::move(cond)), update(std::move(update)),
           body(std::move(body)) {}
 };
 

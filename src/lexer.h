@@ -16,6 +16,7 @@ enum class TokenType {
     IF,           // if
     ELSE,         // else
     WHILE,        // while
+    FOR,          // for
     TRUE_KW,      // true
     FALSE_KW,     // false
 
@@ -24,6 +25,7 @@ enum class TokenType {
     MINUS,        // -
     STAR,         // *
     SLASH,        // /
+    PERCENT,      // %
     EQUALS,       // =
     EQEQ,         // ==
     BANG,         // !

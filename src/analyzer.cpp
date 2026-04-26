@@ -132,6 +132,7 @@ void Analyzer::visitStatement(ASTNode* node) {
         case NodeKind::ReturnStmt:   visitReturnStmt(static_cast<ReturnStmt*>(node));       break;
         case NodeKind::IfStmt:       visitIfStmt(static_cast<IfStmt*>(node));               break;
         case NodeKind::WhileStmt:    visitWhileStmt(static_cast<WhileStmt*>(node));         break;
+        case NodeKind::ForStmt:      visitForStmt(static_cast<ForStmt*>(node));             break;
         case NodeKind::ExprStmt:     visitExprStmt(static_cast<ExprStmt*>(node));           break;
         default: break;
     }
@@ -214,6 +215,23 @@ void Analyzer::visitWhileStmt(WhileStmt* node) {
 
     pushScope();
     for (const auto& s : node->body) visitStatement(s.get());
+    popScope();
+}
+
+// for (init; cond; update) { body }
+// init variable is scoped to the for loop (push/pop scope around the whole thing)
+void Analyzer::visitForStmt(ForStmt* node) {
+    pushScope();                                          // for-header scope
+
+    if (node->init) visitStatement(node->init.get());
+    if (node->condition) inferType(node->condition.get());
+
+    pushScope();                                          // body scope
+    for (const auto& s : node->body) visitStatement(s.get());
+    popScope();
+
+    if (node->update) inferType(node->update.get());
+
     popScope();
 }
 
@@ -358,7 +376,13 @@ std::string Analyzer::binaryResultType(const std::string& op,
         return "bool";
     }
 
-    // + - * / : απαιτούν αριθμητικούς τελεστέους
+    // + : επιτρέπει string + string (concatenation)
+    if (op == "+") {
+        if ((lt == "string" || lt == "unknown") && (rt == "string" || rt == "unknown"))
+            return "string";
+    }
+
+    // + - * / % : απαιτούν αριθμητικούς τελεστέους
     if (!isNumeric(lt) && lt != "unknown")
         addError("operator '" + op + "' requires numeric operands, got '" + lt + "'", line);
     if (!isNumeric(rt) && rt != "unknown")

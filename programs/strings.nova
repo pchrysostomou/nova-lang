@@ -1,0 +1,23 @@
+fn greet(name: string) -> string {
+    return "Hello, " + name + "!"
+}
+
+fn repeat(s: string, n: int) -> string {
+    let result = ""
+    let i = 0
+    while (i < n) {
+        result = result + s
+        i = i + 1
+    }
+    return result
+}
+
+print(greet("Nova"))
+print(greet("World"))
+
+let sep = repeat("-", 10)
+print(sep)
+
+let lang = "Nova"
+let version = "0.1"
+print("Language: " + lang + "  Version: " + version)

@@ -54,6 +54,7 @@ void CodeGen::genStatement(ASTNode* node) {
         case NodeKind::ReturnStmt:   genReturnStmt(static_cast<ReturnStmt*>(node));       break;
         case NodeKind::IfStmt:       genIfStmt(static_cast<IfStmt*>(node));               break;
         case NodeKind::WhileStmt:    genWhileStmt(static_cast<WhileStmt*>(node));         break;
+        case NodeKind::ForStmt:      genForStmt(static_cast<ForStmt*>(node));             break;
         case NodeKind::ExprStmt:     genExprStmt(static_cast<ExprStmt*>(node));           break;
         default: break;
     }
@@ -152,6 +153,49 @@ void CodeGen::genWhileStmt(WhileStmt* node) {
     patch(jumpOut, currentSize());                   // after_loop = here
 }
 
+// for (init; cond; update) { body }
+//
+// Bytecode layout:
+//   <init>                   (VarDecl or assignment, or nothing)
+//   <loop_start>:
+//   <cond>                   (or PUSH true if no condition)
+//   JUMP_IF_FALSE → after
+//   <body>
+//   <update>                 (assignment — value discarded)
+//   JUMP → loop_start
+//   <after>:
+void CodeGen::genForStmt(ForStmt* node) {
+    if (node->init) genStatement(node->init.get());
+
+    int loopStart = currentSize();
+
+    if (node->condition) {
+        genExpr(node->condition.get());
+    } else {
+        emitConst(Value::Bool(true));
+    }
+
+    int jumpOut = emit(Op::JUMP_IF_FALSE, 0);
+
+    for (const auto& s : node->body)
+        genStatement(s.get());
+
+    // update: treat like ExprStmt (Assignment → STORE with no DUP; other → POP)
+    if (node->update) {
+        if (node->update->kind == NodeKind::Assignment) {
+            auto* assign = static_cast<Assignment*>(node->update.get());
+            genExpr(assign->value.get());
+            emitStore(assign->name);
+        } else {
+            genExpr(node->update.get());
+            emit(Op::POP);
+        }
+    }
+
+    emit(Op::JUMP, loopStart);
+    patch(jumpOut, currentSize());
+}
+
 // Έκφραση ως statement:
 //   - Assignment: δεν χρειάζεται POP (STORE αφαιρεί από stack)
 //   - Οτιδήποτε άλλο: γεννάει τιμή → POP για να μην μένει στο stack
@@ -210,7 +254,7 @@ void CodeGen::genBinaryOp(BinaryOp* node) {
     genExpr(node->right.get());   // push right
 
     static const std::unordered_map<std::string, Op> OPS = {
-        {"+", Op::ADD}, {"-", Op::SUB}, {"*", Op::MUL}, {"/", Op::DIV},
+        {"+", Op::ADD}, {"-", Op::SUB}, {"*", Op::MUL}, {"/", Op::DIV}, {"%", Op::MOD},
         {"==", Op::EQ}, {"!=", Op::NEQ},
         {"<",  Op::LT}, {">",  Op::GT}, {"<=", Op::LEQ}, {">=", Op::GEQ},
     };

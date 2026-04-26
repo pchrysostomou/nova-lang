@@ -52,6 +52,7 @@ private:
     NodePtr parseReturnStmt();
     NodePtr parseIfStmt();
     NodePtr parseWhileStmt();
+    NodePtr parseForStmt();
     NodePtr parseExprStmt();
 
     // ── Expression parsers (precedence chain) ─────────────────────────────────
