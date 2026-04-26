@@ -3,6 +3,7 @@
 #include "analyzer.h"
 #include "codegen.h"
 #include "vm.h"
+#include "error.h"
 
 #include <iostream>
 #include <fstream>
@@ -53,20 +54,17 @@ int main(int argc, char* argv[]) {
     }
 
     // ── Phase 2: Parser ────────────────────────────────────────────────────────
-    std::unique_ptr<Program> program;
-    try {
-        Parser parser(std::move(tokens));
-        program = parser.parse();
-    } catch (const std::exception& e) {
-        std::cerr << path << ": syntax error: " << e.what() << "\n";
+    Parser                   parser(std::move(tokens));
+    std::unique_ptr<Program> program = parser.parse();
+    if (parser.hasErrors()) {
+        renderErrors(path, parser.errors(), source);
         return 1;
     }
 
     // ── Phase 3: Semantic Analyzer ─────────────────────────────────────────────
     Analyzer analyzer;
     if (!analyzer.analyze(program.get())) {
-        for (const auto& err : analyzer.errors())
-            std::cerr << path << ":" << err.line << ": error: " << err.message << "\n";
+        renderErrors(path, analyzer.errors(), source);
         return 1;
     }
 

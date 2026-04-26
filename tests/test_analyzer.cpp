@@ -18,7 +18,7 @@ void check(const std::string& name, bool cond) {
 // ── Helper ─────────────────────────────────────────────────────────────────────
 
 struct Result {
-    std::vector<AnalysisError> errors;
+    std::vector<Diagnostic> errors;
     bool ok() const { return errors.empty(); }
     int  count() const { return (int)errors.size(); }
 

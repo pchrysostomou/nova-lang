@@ -1,18 +1,9 @@
 #pragma once
 #include "ast.h"
+#include "error.h"
 #include <string>
 #include <vector>
 #include <unordered_map>
-
-// ── Σφάλμα ανάλυσης ───────────────────────────────────────────────────────────
-//
-// Ο analyzer ΔΕΝ ρίχνει exception — συλλέγει όλα τα σφάλματα ώστε να τα
-// αναφέρει μαζί στον χρήστη (σαν πραγματικός compiler).
-
-struct AnalysisError {
-    std::string message;
-    int         line;
-};
 
 // ── Semantic Analyzer ─────────────────────────────────────────────────────────
 //
@@ -26,13 +17,13 @@ public:
     // Επιστρέφει true αν δεν βρέθηκαν σφάλματα
     bool analyze(Program* program);
 
-    const std::vector<AnalysisError>& errors() const { return errors_; }
+    const std::vector<Diagnostic>& errors() const { return errors_; }
     bool hasErrors() const { return !errors_.empty(); }
 
 private:
     // ── Σφάλματα ──────────────────────────────────────────────────────────────
-    std::vector<AnalysisError> errors_;
-    void addError(const std::string& msg, int line);
+    std::vector<Diagnostic> errors_;
+    void addError(const std::string& msg, int line, int col = 0);
 
     // ── Scope stack ───────────────────────────────────────────────────────────
     //

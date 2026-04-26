@@ -26,9 +26,8 @@ Token Parser::consume() {
 // Όπως consume αλλά πετάει σφάλμα αν ο τύπος δεν ταιριάζει
 Token Parser::expect(TokenType type) {
     if (!check(type)) {
-        error("Expected '" + tokenTypeToString(type) +
-              "' but got '" + current().value +
-              "' at line " + std::to_string(current().line));
+        error("expected '" + tokenTypeToString(type) +
+              "' but got '" + current().value + "'");
     }
     return consume();
 }
@@ -66,7 +65,30 @@ bool Parser::canStartExpression() const {
 }
 
 void Parser::error(const std::string& msg) const {
-    throw std::runtime_error(msg);
+    throw ParseError(msg, current().line, current().col);
+}
+
+// Skip tokens until we reach a point where we can resume parsing a new
+// statement cleanly.  Called after recording a ParseError.
+void Parser::synchronize() {
+    while (!check(TokenType::EOF_TOKEN)) {
+        switch (current().type) {
+            // These tokens start a new statement — stop before consuming them
+            case TokenType::FN:
+            case TokenType::LET:
+            case TokenType::IF:
+            case TokenType::WHILE:
+            case TokenType::FOR:
+            case TokenType::RETURN:
+                return;
+            // A closing brace ends the current block — consume and stop
+            case TokenType::RBRACE:
+                consume();
+                return;
+            default:
+                consume();
+        }
+    }
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -108,7 +130,14 @@ std::vector<Param> Parser::parseParams() {
 std::unique_ptr<Program> Parser::parse() {
     auto program = std::make_unique<Program>();
     while (!check(TokenType::EOF_TOKEN)) {
-        program->statements.push_back(parseStatement());
+        size_t before = pos;
+        try {
+            program->statements.push_back(parseStatement());
+        } catch (const ParseError& e) {
+            errors_.push_back({e.what(), e.line, e.col});
+            if (pos == before) consume();   // guarantee forward progress
+            synchronize();
+        }
     }
     return program;
 }
@@ -433,6 +462,5 @@ NodePtr Parser::parsePrimary() {
         return expr;
     }
 
-    error("Unexpected token '" + tok.value +
-          "' at line " + std::to_string(tok.line));
+    error("unexpected token '" + tok.value + "'");
 }

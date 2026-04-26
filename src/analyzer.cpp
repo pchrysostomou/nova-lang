@@ -4,8 +4,8 @@
 
 // ── Errors ─────────────────────────────────────────────────────────────────────
 
-void Analyzer::addError(const std::string& msg, int line) {
-    errors_.push_back({msg, line});
+void Analyzer::addError(const std::string& msg, int line, int col) {
+    errors_.push_back({msg, line, col});
 }
 
 // ── Scope management ───────────────────────────────────────────────────────────

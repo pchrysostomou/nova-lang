@@ -1,9 +1,20 @@
 #pragma once
 #include "lexer.h"
 #include "ast.h"
+#include "error.h"
 #include <vector>
 #include <memory>
 #include <stdexcept>
+
+// Exception thrown internally when the parser hits a syntax error.
+// Caught by parse() so it can recover and report multiple errors.
+struct ParseError : std::exception {
+    std::string msg;
+    int line, col;
+    ParseError(std::string m, int l, int c)
+        : msg(std::move(m)), line(l), col(c) {}
+    const char* what() const noexcept override { return msg.c_str(); }
+};
 
 // ── Parser ────────────────────────────────────────────────────────────────────
 //
@@ -24,11 +35,18 @@
 class Parser {
 public:
     explicit Parser(std::vector<Token> tokens);
+
+    // Returns the AST (possibly partial if there were errors).
+    // Check hasErrors() after parse() to see if any syntax errors occurred.
     std::unique_ptr<Program> parse();
 
+    bool                           hasErrors() const { return !errors_.empty(); }
+    const std::vector<Diagnostic>& errors()    const { return errors_; }
+
 private:
-    std::vector<Token> tokens;
-    size_t pos = 0;
+    std::vector<Token>    tokens;
+    size_t                pos = 0;
+    std::vector<Diagnostic> errors_;
 
     // ── Token utilities ───────────────────────────────────────────────────────
     const Token& current() const;
@@ -66,6 +84,7 @@ private:
     NodePtr parseCall();
     NodePtr parsePrimary();
 
-    // ── Error ─────────────────────────────────────────────────────────────────
+    // ── Error recovery ────────────────────────────────────────────────────────
     [[noreturn]] void error(const std::string& msg) const;
+    void              synchronize();
 };
