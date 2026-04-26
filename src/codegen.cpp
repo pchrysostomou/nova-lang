@@ -244,6 +244,32 @@ void CodeGen::genExpr(ASTNode* node) {
         case NodeKind::Assignment:
             genAssignmentExpr(static_cast<Assignment*>(node));
             break;
+        case NodeKind::ArrayLiteral: {
+            auto* arr = static_cast<ArrayLiteral*>(node);
+            for (const auto& e : arr->elements)
+                genExpr(e.get());
+            emit(Op::ARRAY_NEW, (int)arr->elements.size());
+            break;
+        }
+        case NodeKind::IndexExpr: {
+            auto* ie = static_cast<IndexExpr*>(node);
+            genExpr(ie->array.get());
+            genExpr(ie->index.get());
+            emit(Op::ARRAY_GET);
+            break;
+        }
+        case NodeKind::IndexAssign: {
+            auto* ia = static_cast<IndexAssign*>(node);
+            genExpr(ia->array.get());
+            genExpr(ia->index.get());
+            genExpr(ia->value.get());
+            emit(Op::ARRAY_SET);
+            // ARRAY_SET mutates through shared_ptr; push the new value as result
+            genExpr(ia->array.get());
+            genExpr(ia->index.get());
+            emit(Op::ARRAY_GET);
+            break;
+        }
         default:
             throw std::runtime_error("CodeGen: unknown expression node");
     }

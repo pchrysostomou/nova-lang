@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <memory>
 #include <unordered_map>
 #include <stdexcept>
 
@@ -9,23 +10,37 @@
 // Κάθε τιμή στη Nova είναι ένα Value.
 // Χρησιμοποιούμε tagged union (type + data) αντί για std::variant
 // για να είναι κατανοητό σε beginner-level C++.
+//
+// Arrays: shared_ptr<ArrayValue> — reference semantics.
+// ArrayValue is forward-declared here and defined after Value so that
+// std::vector<Value> inside ArrayValue compiles with a complete Value type.
 
-enum class ValueType { Int, Float, String, Bool, Void };
+struct ArrayValue;   // forward declaration — defined after Value below
+
+enum class ValueType { Int, Float, String, Bool, Void, Array };
 
 struct Value {
     ValueType   type    = ValueType::Void;
     double      num     = 0;       // Int και Float
     bool        boolean = false;   // Bool
     std::string str;               // String
+    std::shared_ptr<ArrayValue> array;  // Array (null for non-array Values)
 
-    static Value Int(long long v)       { Value r; r.type = ValueType::Int;    r.num  = (double)v; return r; }
-    static Value Float(double v)        { Value r; r.type = ValueType::Float;  r.num  = v;         return r; }
-    static Value String(std::string v)  { Value r; r.type = ValueType::String; r.str  = std::move(v); return r; }
-    static Value Bool(bool v)           { Value r; r.type = ValueType::Bool;   r.boolean = v;      return r; }
+    static Value Int(long long v)       { Value r; r.type = ValueType::Int;    r.num     = (double)v;    return r; }
+    static Value Float(double v)        { Value r; r.type = ValueType::Float;  r.num     = v;            return r; }
+    static Value String(std::string v)  { Value r; r.type = ValueType::String; r.str     = std::move(v); return r; }
+    static Value Bool(bool v)           { Value r; r.type = ValueType::Bool;   r.boolean = v;            return r; }
     static Value Void()                 { return {}; }
+    static Value Array(std::vector<Value> elems);  // defined in vm.cpp
 
     bool        truthy()   const;
     std::string toString() const;
+};
+
+// Defined after Value so std::vector<Value> has a complete element type.
+struct ArrayValue {
+    std::vector<Value> elements;
+    explicit ArrayValue(std::vector<Value> e) : elements(std::move(e)) {}
 };
 
 // ── Opcodes ───────────────────────────────────────────────────────────────────
@@ -59,6 +74,12 @@ enum class Op {
     CALL,
     RETURN,      // void return — pushes Void to caller
     RETURN_VAL,  // pop value, return it — pushes value to caller
+
+    // Arrays
+    // ARRAY_NEW: a = element count; pops a values (pushed left-to-right), builds array, pushes it
+    ARRAY_NEW,
+    ARRAY_GET,   // pop index, pop array → push array[index]
+    ARRAY_SET,   // pop value, pop index, pop array → array[index] = value (mutates in place)
 
     // Stack
     POP,    // απόρριψη κορυφής

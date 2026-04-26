@@ -18,6 +18,9 @@ enum class NodeKind {
     UnaryOp,
     FunctionCall,
     Assignment,
+    ArrayLiteral,
+    IndexExpr,
+    IndexAssign,
 
     // Statements (εκτελούνται για παρενέργειες)
     VarDecl,
@@ -101,6 +104,32 @@ struct FunctionCall : ASTNode {
     FunctionCall(std::string name, NodeList args, int line = 0)
         : ASTNode(NodeKind::FunctionCall, line), name(std::move(name)),
           args(std::move(args)) {}
+};
+
+// [1, 2, 3]
+struct ArrayLiteral : ASTNode {
+    NodeList elements;
+    ArrayLiteral(NodeList elements, int line = 0)
+        : ASTNode(NodeKind::ArrayLiteral, line), elements(std::move(elements)) {}
+};
+
+// arr[i]
+struct IndexExpr : ASTNode {
+    NodePtr array;
+    NodePtr index;
+    IndexExpr(NodePtr array, NodePtr index, int line = 0)
+        : ASTNode(NodeKind::IndexExpr, line), array(std::move(array)),
+          index(std::move(index)) {}
+};
+
+// arr[i] = value
+struct IndexAssign : ASTNode {
+    NodePtr array;
+    NodePtr index;
+    NodePtr value;
+    IndexAssign(NodePtr array, NodePtr index, NodePtr value, int line = 0)
+        : ASTNode(NodeKind::IndexAssign, line), array(std::move(array)),
+          index(std::move(index)), value(std::move(value)) {}
 };
 
 // x = 42  (μετά την αρχική δήλωση)

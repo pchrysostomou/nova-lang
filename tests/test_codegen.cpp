@@ -476,6 +476,57 @@ else if (x == 3) { print("three") }
     check("else if no final else", run(noelse) == "two\n");
 }
 
+// ── Arrays ────────────────────────────────────────────────────────────────────
+
+void test_array_literal() {
+    std::cout << "\n[Array — literal and indexing]\n";
+    check("arr[0]", run("let a = [10, 20, 30]\nprint(a[0])") == "10\n");
+    check("arr[1]", run("let a = [10, 20, 30]\nprint(a[1])") == "20\n");
+    check("arr[2]", run("let a = [10, 20, 30]\nprint(a[2])") == "30\n");
+}
+
+void test_array_set() {
+    std::cout << "\n[Array — element assignment]\n";
+    check("set arr[1]",
+          run("let a = [1, 2, 3]\na[1] = 99\nprint(a[1])") == "99\n");
+    check("set then read others",
+          run("let a = [1, 2, 3]\na[0] = 42\nprint(a[0])\nprint(a[2])") == "42\n3\n");
+}
+
+void test_array_print() {
+    std::cout << "\n[Array — print whole array]\n";
+    check("print [1,2,3]",
+          run("let a = [1, 2, 3]\nprint(a)") == "[1, 2, 3]\n");
+    check("print empty",
+          run("let a = []\nprint(a)") == "[]\n");
+}
+
+void test_array_in_loop() {
+    std::cout << "\n[Array — iterate with for]\n";
+    std::string code = R"(
+let a = [10, 20, 30, 40, 50]
+let sum = 0
+for (let i = 0; i < 5; i = i + 1) {
+    sum = sum + a[i]
+}
+print(sum)
+)";
+    check("sum of elements", run(code) == "150\n");
+}
+
+void test_array_in_function() {
+    std::cout << "\n[Array — passed to function]\n";
+    std::string code = R"(
+fn first(a: int) -> int {
+    return a
+}
+let arr = [7, 8, 9]
+print(first(arr[0]))
+print(first(arr[2]))
+)";
+    check("arr[0] and arr[2] to fn", run(code) == "7\n9\n");
+}
+
 // ── Full blueprint program ─────────────────────────────────────────────────────
 
 void test_full_blueprint() {
@@ -529,6 +580,11 @@ int main() {
     test_for_in_function();
     test_for_nested();
     test_else_if();
+    test_array_literal();
+    test_array_set();
+    test_array_print();
+    test_array_in_loop();
+    test_array_in_function();
     test_full_blueprint();
 
     std::cout << "\n═══════════════════════════\n";

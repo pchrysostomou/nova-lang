@@ -1,0 +1,24 @@
+// arrays.nova — demo of Nova array support
+
+// Create and print an array
+let nums = [10, 20, 30, 40, 50]
+print(nums)
+
+// Index access
+print(nums[0])
+print(nums[4])
+
+// Element assignment
+nums[2] = 99
+print(nums)
+
+// Iterate and sum
+let sum = 0
+for (let i = 0; i < 5; i = i + 1) {
+    sum = sum + nums[i]
+}
+print(sum)
+
+// Array of strings
+let words = ["hello", "nova", "world"]
+print(words[0] + " " + words[2])

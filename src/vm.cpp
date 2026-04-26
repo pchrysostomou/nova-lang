@@ -5,12 +5,20 @@
 
 // ── Value ─────────────────────────────────────────────────────────────────────
 
+Value Value::Array(std::vector<Value> elems) {
+    Value r;
+    r.type  = ValueType::Array;
+    r.array = std::make_shared<ArrayValue>(std::move(elems));
+    return r;
+}
+
 bool Value::truthy() const {
     switch (type) {
         case ValueType::Bool:   return boolean;
         case ValueType::Int:    return num != 0;
         case ValueType::Float:  return num != 0.0;
         case ValueType::String: return !str.empty();
+        case ValueType::Array:  return !array->elements.empty();
         case ValueType::Void:   return false;
     }
     return false;
@@ -26,13 +34,20 @@ std::string Value::toString() const {
             std::ostringstream oss;
             oss << num;
             std::string s = oss.str();
-            // Αν φαίνεται σαν ακέραιος, πρόσθεσε .0
             if (s.find('.') == std::string::npos && s.find('e') == std::string::npos)
                 s += ".0";
             return s;
         }
         case ValueType::String: return str;
         case ValueType::Bool:   return boolean ? "true" : "false";
+        case ValueType::Array: {
+            std::string s = "[";
+            for (size_t i = 0; i < array->elements.size(); ++i) {
+                if (i > 0) s += ", ";
+                s += array->elements[i].toString();
+            }
+            return s + "]";
+        }
         case ValueType::Void:   return "";
     }
     return "";
@@ -259,6 +274,45 @@ void VM::run() {
                 callStack_.pop_back();
                 push(std::move(retVal));
                 continue;
+            }
+
+            case Op::ARRAY_NEW: {
+                int count = instr.a;
+                std::vector<Value> elems(count);
+                for (int i = count - 1; i >= 0; --i) elems[i] = pop();
+                push(Value::Array(std::move(elems)));
+                break;
+            }
+
+            case Op::ARRAY_GET: {
+                Value idx = pop();
+                Value arr = pop();
+                if (arr.type != ValueType::Array)
+                    throw std::runtime_error("VM: cannot index a non-array value");
+                int i = (int)idx.num;
+                auto& elems = arr.array->elements;
+                if (i < 0 || i >= (int)elems.size())
+                    throw std::runtime_error("VM: index " + std::to_string(i) +
+                                             " out of bounds (size " +
+                                             std::to_string(elems.size()) + ")");
+                push(elems[i]);
+                break;
+            }
+
+            case Op::ARRAY_SET: {
+                Value val = pop();
+                Value idx = pop();
+                Value arr = pop();
+                if (arr.type != ValueType::Array)
+                    throw std::runtime_error("VM: cannot index a non-array value");
+                int i = (int)idx.num;
+                auto& elems = arr.array->elements;
+                if (i < 0 || i >= (int)elems.size())
+                    throw std::runtime_error("VM: index " + std::to_string(i) +
+                                             " out of bounds (size " +
+                                             std::to_string(elems.size()) + ")");
+                elems[i] = std::move(val);
+                break;
             }
 
             case Op::POP:

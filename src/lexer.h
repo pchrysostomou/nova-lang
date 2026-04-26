@@ -38,6 +38,8 @@ enum class TokenType {
     // Σύμβολα
     LPAREN,       // (
     RPAREN,       // )
+    LBRACKET,     // [
+    RBRACKET,     // ]
     LBRACE,       // {
     RBRACE,       // }
     COLON,        // :

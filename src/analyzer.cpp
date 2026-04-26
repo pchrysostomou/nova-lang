@@ -350,6 +350,26 @@ std::string Analyzer::inferType(ASTNode* node) {
             return sig.returnType;
         }
 
+        case NodeKind::ArrayLiteral: {
+            auto* arr = static_cast<ArrayLiteral*>(node);
+            for (const auto& e : arr->elements) inferType(e.get());
+            return "array";
+        }
+
+        case NodeKind::IndexExpr: {
+            auto* ie = static_cast<IndexExpr*>(node);
+            inferType(ie->array.get());
+            inferType(ie->index.get());
+            return "unknown";   // element type not tracked statically
+        }
+
+        case NodeKind::IndexAssign: {
+            auto* ia = static_cast<IndexAssign*>(node);
+            inferType(ia->array.get());
+            inferType(ia->index.get());
+            return inferType(ia->value.get());
+        }
+
         default:
             return "unknown";
     }

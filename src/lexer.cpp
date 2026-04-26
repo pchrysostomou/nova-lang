@@ -44,6 +44,8 @@ std::string tokenTypeToString(TokenType type) {
         case TokenType::GEQ:        return "GEQ";
         case TokenType::LPAREN:     return "LPAREN";
         case TokenType::RPAREN:     return "RPAREN";
+        case TokenType::LBRACKET:   return "LBRACKET";
+        case TokenType::RBRACKET:   return "RBRACKET";
         case TokenType::LBRACE:     return "LBRACE";
         case TokenType::RBRACE:     return "RBRACE";
         case TokenType::COLON:      return "COLON";
@@ -188,6 +190,8 @@ std::vector<Token> Lexer::tokenize() {
             case '%': tok.type = TokenType::PERCENT;   tok.value = "%";  break;
             case '(': tok.type = TokenType::LPAREN;    tok.value = "(";  break;
             case ')': tok.type = TokenType::RPAREN;    tok.value = ")";  break;
+            case '[': tok.type = TokenType::LBRACKET;  tok.value = "[";  break;
+            case ']': tok.type = TokenType::RBRACKET;  tok.value = "]";  break;
             case '{': tok.type = TokenType::LBRACE;    tok.value = "{";  break;
             case '}': tok.type = TokenType::RBRACE;    tok.value = "}";  break;
             case ':': tok.type = TokenType::COLON;     tok.value = ":";  break;

@@ -56,6 +56,7 @@ bool Parser::canStartExpression() const {
         case TokenType::FALSE_KW:
         case TokenType::IDENTIFIER:
         case TokenType::LPAREN:
+        case TokenType::LBRACKET:
         case TokenType::MINUS:
         case TokenType::BANG:
             return true;
@@ -308,6 +309,7 @@ NodePtr Parser::parseExpression() {
 }
 
 // Αν βλέπουμε  identifier = expr  → Assignment (δεξιά-αριστερά)
+// Αν βλέπουμε  expr[i] = expr     → IndexAssign
 // Αλλιώς       → συνέχισε στη σύγκριση ισότητας
 NodePtr Parser::parseAssignment() {
     auto left = parseEquality();
@@ -318,6 +320,15 @@ NodePtr Parser::parseAssignment() {
         consume();   // eat '='
         auto right = parseAssignment();   // δεξιά-αριστερά: x = y = 5 → x = (y = 5)
         return std::make_unique<Assignment>(id->name, std::move(right), ln);
+    }
+
+    if (left->kind == NodeKind::IndexExpr && check(TokenType::EQUALS)) {
+        auto* ie = static_cast<IndexExpr*>(left.get());
+        int ln   = current().line;
+        consume();   // eat '='
+        auto val = parseAssignment();
+        return std::make_unique<IndexAssign>(
+            std::move(ie->array), std::move(ie->index), std::move(val), ln);
     }
 
     return left;
@@ -392,26 +403,38 @@ NodePtr Parser::parseUnary() {
 }
 
 // foo(args)  →  FunctionCall
-// foo        →  Identifier  (χωρίς κλήση)
+// expr[i]    →  IndexExpr   (postfix, chainable: arr[i][j])
+// foo        →  Identifier
 NodePtr Parser::parseCall() {
     auto expr = parsePrimary();
 
-    if (expr->kind == NodeKind::Identifier && check(TokenType::LPAREN)) {
-        auto* id   = static_cast<Identifier*>(expr.get());
-        int   ln   = id->line;
-        auto  name = id->name;
+    // Handle postfix operators in a loop so they can chain: arr[i][j], f(x)[0]
+    while (true) {
+        if (expr->kind == NodeKind::Identifier && check(TokenType::LPAREN)) {
+            auto* id   = static_cast<Identifier*>(expr.get());
+            int   ln   = id->line;
+            auto  name = id->name;
 
-        consume();   // eat '('
-        NodeList args;
-        if (!check(TokenType::RPAREN)) {
-            args.push_back(parseExpression());
-            while (match(TokenType::COMMA)) {
+            consume();   // eat '('
+            NodeList args;
+            if (!check(TokenType::RPAREN)) {
                 args.push_back(parseExpression());
+                while (match(TokenType::COMMA))
+                    args.push_back(parseExpression());
             }
-        }
-        expect(TokenType::RPAREN);
+            expect(TokenType::RPAREN);
+            expr = std::make_unique<FunctionCall>(name, std::move(args), ln);
 
-        return std::make_unique<FunctionCall>(name, std::move(args), ln);
+        } else if (check(TokenType::LBRACKET)) {
+            int ln = expr->line;
+            consume();   // eat '['
+            auto index = parseExpression();
+            expect(TokenType::RBRACKET);
+            expr = std::make_unique<IndexExpr>(std::move(expr), std::move(index), ln);
+
+        } else {
+            break;
+        }
     }
 
     return expr;
@@ -460,6 +483,20 @@ NodePtr Parser::parsePrimary() {
         auto expr = parseExpression();
         expect(TokenType::RPAREN);
         return expr;
+    }
+
+    // [e0, e1, ...]  — array literal
+    if (tok.type == TokenType::LBRACKET) {
+        int ln = tok.line;
+        consume();
+        NodeList elements;
+        if (!check(TokenType::RBRACKET)) {
+            elements.push_back(parseExpression());
+            while (match(TokenType::COMMA))
+                elements.push_back(parseExpression());
+        }
+        expect(TokenType::RBRACKET);
+        return std::make_unique<ArrayLiteral>(std::move(elements), ln);
     }
 
     error("unexpected token '" + tok.value + "'");
