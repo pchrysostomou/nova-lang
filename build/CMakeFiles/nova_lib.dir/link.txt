@@ -1,0 +1,2 @@
+C:\msys64\ucrt64\bin\ar.exe qc libnova_lib.a CMakeFiles/nova_lib.dir/src/lexer.cpp.obj
+C:\msys64\ucrt64\bin\ranlib.exe libnova_lib.a
