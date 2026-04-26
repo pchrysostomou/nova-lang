@@ -17,6 +17,7 @@ enum class TokenType {
     ELSE,         // else
     WHILE,        // while
     FOR,          // for
+    IMPORT,       // import
     TRUE_KW,      // true
     FALSE_KW,     // false
 

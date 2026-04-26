@@ -1,0 +1,11 @@
+// use_math.nova — demo of importing math_lib.nova
+
+import "math_lib.nova"
+
+print(square(7))
+print(cube(3))
+print(abs(-42))
+print(max(13, 8))
+print(min(13, 8))
+print(factorial(6))
+print(power(2, 10))

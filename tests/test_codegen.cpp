@@ -2,8 +2,13 @@
 #include "../src/parser.h"
 #include "../src/codegen.h"
 #include "../src/vm.h"
+#include "../src/importer.h"
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 // ── Test framework ─────────────────────────────────────────────────────────────
 
@@ -527,6 +532,191 @@ print(first(arr[2]))
     check("arr[0] and arr[2] to fn", run(code) == "7\n9\n");
 }
 
+// ── Import helper ─────────────────────────────────────────────────────────────
+//
+// Writes a set of files to a unique temp directory, resolves imports in
+// `mainFile`, compiles and runs it, returns captured output.
+// The temp directory is deleted afterwards.
+
+static std::string runImport(
+    const std::vector<std::pair<std::string, std::string>>& files,
+    const std::string& mainFile)
+{
+    fs::path dir = fs::temp_directory_path() /
+                   ("nova_test_" + std::to_string(std::rand()));
+    fs::create_directories(dir);
+
+    for (const auto& [name, src] : files)
+        std::ofstream(dir / name) << src;
+
+    std::string src;
+    {
+        std::ifstream f(dir / mainFile);
+        src.assign((std::istreambuf_iterator<char>(f)), {});
+    }  // f closed here
+
+    Lexer  lexer(src);
+    Parser parser(lexer.tokenize());
+    auto   prog   = parser.parse();
+    auto   merged = resolveImports(std::move(prog), dir.string());
+
+    CodeGen codegen;
+    auto    chunks = codegen.generate(merged.get());
+
+    VM vm(std::move(chunks));
+    vm.captureOutput = true;
+    vm.run();
+
+    fs::remove_all(dir);
+    return vm.capturedOutput;
+}
+
+// ── Import tests ──────────────────────────────────────────────────────────────
+
+void test_import_basic() {
+    std::cout << "\n[Import — basic function from lib]\n";
+
+    std::string lib = R"(
+fn square(x: int) -> int {
+    return x * x
+}
+fn cube(x: int) -> int {
+    return x * x * x
+}
+)";
+    std::string main = R"(
+import "lib.nova"
+print(square(4))
+print(cube(3))
+)";
+    check("square(4)=16, cube(3)=27",
+          runImport({{"lib.nova", lib}, {"main.nova", main}}, "main.nova")
+          == "16\n27\n");
+}
+
+void test_import_multiple() {
+    std::cout << "\n[Import — multiple libs]\n";
+
+    std::string mathLib = R"(
+fn double(x: int) -> int { return x * 2 }
+)";
+    std::string strLib = R"(
+fn greet(name: string) -> string { return "Hello, " + name }
+)";
+    std::string main = R"(
+import "math.nova"
+import "strings.nova"
+print(double(21))
+print(greet("Nova"))
+)";
+    check("double + greet",
+          runImport({{"math.nova", mathLib}, {"strings.nova", strLib}, {"main.nova", main}},
+                    "main.nova")
+          == "42\nHello, Nova\n");
+}
+
+void test_import_transitive() {
+    std::cout << "\n[Import — transitive (A imports B imports C)]\n";
+
+    std::string c = R"(
+fn base(x: int) -> int { return x + 1 }
+)";
+    std::string b = R"(
+import "c.nova"
+fn mid(x: int) -> int { return base(x) * 2 }
+)";
+    std::string a = R"(
+import "b.nova"
+print(mid(4))
+)";
+    // mid(4) = base(4)*2 = 5*2 = 10
+    check("transitive: mid(4)=10",
+          runImport({{"c.nova", c}, {"b.nova", b}, {"a.nova", a}}, "a.nova")
+          == "10\n");
+}
+
+void test_import_dedup() {
+    std::cout << "\n[Import — deduplication (shared dependency)]\n";
+
+    std::string shared = R"(
+fn add(a: int, b: int) -> int { return a + b }
+)";
+    std::string lib1 = R"(
+import "shared.nova"
+fn triple(x: int) -> int { return add(x, add(x, x)) }
+)";
+    std::string lib2 = R"(
+import "shared.nova"
+fn quadruple(x: int) -> int { return add(add(x, x), add(x, x)) }
+)";
+    std::string main = R"(
+import "lib1.nova"
+import "lib2.nova"
+print(triple(3))
+print(quadruple(3))
+)";
+    // shared.nova inlined only once; both functions work
+    check("dedup: triple=9, quad=12",
+          runImport({{"shared.nova", shared}, {"lib1.nova", lib1},
+                     {"lib2.nova", lib2}, {"main.nova", main}},
+                    "main.nova")
+          == "9\n12\n");
+}
+
+void test_import_missing_file() {
+    std::cout << "\n[Import — missing file throws]\n";
+
+    fs::path dir = fs::temp_directory_path() /
+                   ("nova_test_" + std::to_string(std::rand()));
+    fs::create_directories(dir);
+    std::ofstream(dir / "main.nova") << "import \"missing.nova\"\n";
+
+    std::string src;
+    { std::ifstream f(dir / "main.nova"); src.assign((std::istreambuf_iterator<char>(f)), {}); }
+
+    Lexer  lexer(src);
+    Parser parser(lexer.tokenize());
+    auto   prog = parser.parse();
+
+    bool threw = false;
+    try {
+        resolveImports(std::move(prog), dir.string());
+    } catch (const std::exception&) {
+        threw = true;
+    }
+    fs::remove_all(dir);
+    check("missing file throws", threw);
+}
+
+void test_import_circular() {
+    std::cout << "\n[Import — circular import throws]\n";
+
+    std::string a = "import \"b.nova\"\n";
+    std::string b = "import \"a.nova\"\n";
+
+    fs::path dir = fs::temp_directory_path() /
+                   ("nova_test_" + std::to_string(std::rand()));
+    fs::create_directories(dir);
+    std::ofstream(dir / "a.nova") << a;
+    std::ofstream(dir / "b.nova") << b;
+
+    std::string src;
+    { std::ifstream f(dir / "a.nova"); src.assign((std::istreambuf_iterator<char>(f)), {}); }
+
+    Lexer  lexer(src);
+    Parser parser(lexer.tokenize());
+    auto   prog = parser.parse();
+
+    bool threw = false;
+    try {
+        resolveImports(std::move(prog), dir.string());
+    } catch (const std::exception&) {
+        threw = true;
+    }
+    fs::remove_all(dir);
+    check("circular import throws", threw);
+}
+
 // ── Full blueprint program ─────────────────────────────────────────────────────
 
 void test_full_blueprint() {
@@ -585,6 +775,12 @@ int main() {
     test_array_print();
     test_array_in_loop();
     test_array_in_function();
+    test_import_basic();
+    test_import_multiple();
+    test_import_transitive();
+    test_import_dedup();
+    test_import_missing_file();
+    test_import_circular();
     test_full_blueprint();
 
     std::cout << "\n═══════════════════════════\n";

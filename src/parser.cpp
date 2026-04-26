@@ -81,6 +81,7 @@ void Parser::synchronize() {
             case TokenType::WHILE:
             case TokenType::FOR:
             case TokenType::RETURN:
+            case TokenType::IMPORT:
                 return;
             // A closing brace ends the current block — consume and stop
             case TokenType::RBRACE:
@@ -151,6 +152,7 @@ NodePtr Parser::parseStatement() {
         case TokenType::IF:     return parseIfStmt();
         case TokenType::WHILE:  return parseWhileStmt();
         case TokenType::FOR:    return parseForStmt();
+        case TokenType::IMPORT: return parseImportStmt();
         default:                return parseExprStmt();
     }
 }
@@ -289,6 +291,15 @@ NodePtr Parser::parseForStmt() {
     auto body = parseBlock();
     return std::make_unique<ForStmt>(std::move(init), std::move(cond),
                                      std::move(update), std::move(body), ln);
+}
+
+// import "path/to/file.nova"
+NodePtr Parser::parseImportStmt() {
+    int ln = current().line;
+    expect(TokenType::IMPORT);
+    auto path = expect(TokenType::STRING).value;
+    skipSemicolon();
+    return std::make_unique<ImportStmt>(path, ln);
 }
 
 // Έκφραση ως statement: add(3,5)  /  x = 42

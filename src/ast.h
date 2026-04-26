@@ -30,6 +30,7 @@ enum class NodeKind {
     WhileStmt,
     ForStmt,
     ExprStmt,
+    ImportStmt,
 
     // Δομή
     Program,
@@ -218,6 +219,13 @@ struct ExprStmt : ASTNode {
     NodePtr expr;
     ExprStmt(NodePtr expr, int line = 0)
         : ASTNode(NodeKind::ExprStmt, line), expr(std::move(expr)) {}
+};
+
+// import "path/to/file.nova"
+struct ImportStmt : ASTNode {
+    std::string path;
+    ImportStmt(std::string path, int line = 0)
+        : ASTNode(NodeKind::ImportStmt, line), path(std::move(path)) {}
 };
 
 // ── Ρίζα ─────────────────────────────────────────────────────────────────────

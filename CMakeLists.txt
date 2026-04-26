@@ -19,6 +19,7 @@ add_library(nova_lib
     src/analyzer.cpp
     src/vm.cpp
     src/codegen.cpp
+    src/importer.cpp
 )
 
 # ── Nova compiler executable

@@ -36,3 +36,6 @@ jobs:
 
       - name: Test — CodeGen + VM
         run: ./build/test_codegen
+
+      - name: Run all programs
+        run: bash scripts/run_all.sh --no-build

@@ -11,6 +11,7 @@ static const std::unordered_map<std::string, TokenType> KEYWORDS = {
     {"else",   TokenType::ELSE},
     {"while",  TokenType::WHILE},
     {"for",    TokenType::FOR},
+    {"import", TokenType::IMPORT},
     {"true",   TokenType::TRUE_KW},
     {"false",  TokenType::FALSE_KW},
 };
@@ -27,6 +28,7 @@ std::string tokenTypeToString(TokenType type) {
         case TokenType::ELSE:       return "ELSE";
         case TokenType::WHILE:      return "WHILE";
         case TokenType::FOR:        return "FOR";
+        case TokenType::IMPORT:     return "IMPORT";
         case TokenType::TRUE_KW:    return "TRUE";
         case TokenType::FALSE_KW:   return "FALSE";
         case TokenType::PLUS:       return "PLUS";
