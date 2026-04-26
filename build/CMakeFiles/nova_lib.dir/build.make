@@ -85,17 +85,81 @@ CMakeFiles/nova_lib.dir/src/lexer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/nova_lib.dir/src/lexer.cpp.s"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Compiler\src\lexer.cpp -o CMakeFiles\nova_lib.dir\src\lexer.cpp.s
 
+CMakeFiles/nova_lib.dir/src/parser.cpp.obj: CMakeFiles/nova_lib.dir/flags.make
+CMakeFiles/nova_lib.dir/src/parser.cpp.obj: C:/Compiler/src/parser.cpp
+CMakeFiles/nova_lib.dir/src/parser.cpp.obj: CMakeFiles/nova_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Compiler\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/nova_lib.dir/src/parser.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/nova_lib.dir/src/parser.cpp.obj -MF CMakeFiles\nova_lib.dir\src\parser.cpp.obj.d -o CMakeFiles\nova_lib.dir\src\parser.cpp.obj -c C:\Compiler\src\parser.cpp
+
+CMakeFiles/nova_lib.dir/src/parser.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/nova_lib.dir/src/parser.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Compiler\src\parser.cpp > CMakeFiles\nova_lib.dir\src\parser.cpp.i
+
+CMakeFiles/nova_lib.dir/src/parser.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/nova_lib.dir/src/parser.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Compiler\src\parser.cpp -o CMakeFiles\nova_lib.dir\src\parser.cpp.s
+
+CMakeFiles/nova_lib.dir/src/analyzer.cpp.obj: CMakeFiles/nova_lib.dir/flags.make
+CMakeFiles/nova_lib.dir/src/analyzer.cpp.obj: C:/Compiler/src/analyzer.cpp
+CMakeFiles/nova_lib.dir/src/analyzer.cpp.obj: CMakeFiles/nova_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Compiler\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/nova_lib.dir/src/analyzer.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/nova_lib.dir/src/analyzer.cpp.obj -MF CMakeFiles\nova_lib.dir\src\analyzer.cpp.obj.d -o CMakeFiles\nova_lib.dir\src\analyzer.cpp.obj -c C:\Compiler\src\analyzer.cpp
+
+CMakeFiles/nova_lib.dir/src/analyzer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/nova_lib.dir/src/analyzer.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Compiler\src\analyzer.cpp > CMakeFiles\nova_lib.dir\src\analyzer.cpp.i
+
+CMakeFiles/nova_lib.dir/src/analyzer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/nova_lib.dir/src/analyzer.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Compiler\src\analyzer.cpp -o CMakeFiles\nova_lib.dir\src\analyzer.cpp.s
+
+CMakeFiles/nova_lib.dir/src/vm.cpp.obj: CMakeFiles/nova_lib.dir/flags.make
+CMakeFiles/nova_lib.dir/src/vm.cpp.obj: C:/Compiler/src/vm.cpp
+CMakeFiles/nova_lib.dir/src/vm.cpp.obj: CMakeFiles/nova_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Compiler\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/nova_lib.dir/src/vm.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/nova_lib.dir/src/vm.cpp.obj -MF CMakeFiles\nova_lib.dir\src\vm.cpp.obj.d -o CMakeFiles\nova_lib.dir\src\vm.cpp.obj -c C:\Compiler\src\vm.cpp
+
+CMakeFiles/nova_lib.dir/src/vm.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/nova_lib.dir/src/vm.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Compiler\src\vm.cpp > CMakeFiles\nova_lib.dir\src\vm.cpp.i
+
+CMakeFiles/nova_lib.dir/src/vm.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/nova_lib.dir/src/vm.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Compiler\src\vm.cpp -o CMakeFiles\nova_lib.dir\src\vm.cpp.s
+
+CMakeFiles/nova_lib.dir/src/codegen.cpp.obj: CMakeFiles/nova_lib.dir/flags.make
+CMakeFiles/nova_lib.dir/src/codegen.cpp.obj: C:/Compiler/src/codegen.cpp
+CMakeFiles/nova_lib.dir/src/codegen.cpp.obj: CMakeFiles/nova_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Compiler\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/nova_lib.dir/src/codegen.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/nova_lib.dir/src/codegen.cpp.obj -MF CMakeFiles\nova_lib.dir\src\codegen.cpp.obj.d -o CMakeFiles\nova_lib.dir\src\codegen.cpp.obj -c C:\Compiler\src\codegen.cpp
+
+CMakeFiles/nova_lib.dir/src/codegen.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/nova_lib.dir/src/codegen.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Compiler\src\codegen.cpp > CMakeFiles\nova_lib.dir\src\codegen.cpp.i
+
+CMakeFiles/nova_lib.dir/src/codegen.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/nova_lib.dir/src/codegen.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Compiler\src\codegen.cpp -o CMakeFiles\nova_lib.dir\src\codegen.cpp.s
+
 # Object files for target nova_lib
 nova_lib_OBJECTS = \
-"CMakeFiles/nova_lib.dir/src/lexer.cpp.obj"
+"CMakeFiles/nova_lib.dir/src/lexer.cpp.obj" \
+"CMakeFiles/nova_lib.dir/src/parser.cpp.obj" \
+"CMakeFiles/nova_lib.dir/src/analyzer.cpp.obj" \
+"CMakeFiles/nova_lib.dir/src/vm.cpp.obj" \
+"CMakeFiles/nova_lib.dir/src/codegen.cpp.obj"
 
 # External object files for target nova_lib
 nova_lib_EXTERNAL_OBJECTS =
 
 libnova_lib.a: CMakeFiles/nova_lib.dir/src/lexer.cpp.obj
+libnova_lib.a: CMakeFiles/nova_lib.dir/src/parser.cpp.obj
+libnova_lib.a: CMakeFiles/nova_lib.dir/src/analyzer.cpp.obj
+libnova_lib.a: CMakeFiles/nova_lib.dir/src/vm.cpp.obj
+libnova_lib.a: CMakeFiles/nova_lib.dir/src/codegen.cpp.obj
 libnova_lib.a: CMakeFiles/nova_lib.dir/build.make
 libnova_lib.a: CMakeFiles/nova_lib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Compiler\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libnova_lib.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Compiler\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX static library libnova_lib.a"
 	$(CMAKE_COMMAND) -P CMakeFiles\nova_lib.dir\cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\nova_lib.dir\link.txt --verbose=$(VERBOSE)
 

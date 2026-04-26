@@ -128,9 +128,9 @@ let result = add(3, 5)
 
     check("starts with fn",      t[0].type == TokenType::FN);
     check("function name 'add'", t[1].type == TokenType::IDENTIFIER && t[1].value == "add");
-    check("has arrow ->",        t[8].type == TokenType::ARROW);
-    check("has return keyword",  t[11].type == TokenType::RETURN);
-    check("has let",             t[18].type == TokenType::LET);
+    check("has arrow ->",        t[11].type == TokenType::ARROW);
+    check("has return keyword",  t[14].type == TokenType::RETURN);
+    check("has let",             t[19].type == TokenType::LET);
 }
 
 // ── Entry point ────────────────────────────────────────────────────────────────

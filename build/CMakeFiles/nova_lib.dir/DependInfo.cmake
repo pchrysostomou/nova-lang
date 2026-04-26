@@ -8,7 +8,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "C:/Compiler/src/analyzer.cpp" "CMakeFiles/nova_lib.dir/src/analyzer.cpp.obj" "gcc" "CMakeFiles/nova_lib.dir/src/analyzer.cpp.obj.d"
+  "C:/Compiler/src/codegen.cpp" "CMakeFiles/nova_lib.dir/src/codegen.cpp.obj" "gcc" "CMakeFiles/nova_lib.dir/src/codegen.cpp.obj.d"
   "C:/Compiler/src/lexer.cpp" "CMakeFiles/nova_lib.dir/src/lexer.cpp.obj" "gcc" "CMakeFiles/nova_lib.dir/src/lexer.cpp.obj.d"
+  "C:/Compiler/src/parser.cpp" "CMakeFiles/nova_lib.dir/src/parser.cpp.obj" "gcc" "CMakeFiles/nova_lib.dir/src/parser.cpp.obj.d"
+  "C:/Compiler/src/vm.cpp" "CMakeFiles/nova_lib.dir/src/vm.cpp.obj" "gcc" "CMakeFiles/nova_lib.dir/src/vm.cpp.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

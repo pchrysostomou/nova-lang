@@ -141,6 +141,93 @@ test_lexer/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_lexer.dir\build.make CMakeFiles/test_lexer.dir/build
 .PHONY : test_lexer/fast
 
+#=============================================================================
+# Target rules for targets named test_parser
+
+# Build rule for target.
+test_parser: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test_parser
+.PHONY : test_parser
+
+# fast build rule for target.
+test_parser/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_parser.dir\build.make CMakeFiles/test_parser.dir/build
+.PHONY : test_parser/fast
+
+#=============================================================================
+# Target rules for targets named test_analyzer
+
+# Build rule for target.
+test_analyzer: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test_analyzer
+.PHONY : test_analyzer
+
+# fast build rule for target.
+test_analyzer/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_analyzer.dir\build.make CMakeFiles/test_analyzer.dir/build
+.PHONY : test_analyzer/fast
+
+#=============================================================================
+# Target rules for targets named test_codegen
+
+# Build rule for target.
+test_codegen: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test_codegen
+.PHONY : test_codegen
+
+# fast build rule for target.
+test_codegen/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_codegen.dir\build.make CMakeFiles/test_codegen.dir/build
+.PHONY : test_codegen/fast
+
+src/analyzer.obj: src/analyzer.cpp.obj
+.PHONY : src/analyzer.obj
+
+# target to build an object file
+src/analyzer.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\nova_lib.dir\build.make CMakeFiles/nova_lib.dir/src/analyzer.cpp.obj
+.PHONY : src/analyzer.cpp.obj
+
+src/analyzer.i: src/analyzer.cpp.i
+.PHONY : src/analyzer.i
+
+# target to preprocess a source file
+src/analyzer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\nova_lib.dir\build.make CMakeFiles/nova_lib.dir/src/analyzer.cpp.i
+.PHONY : src/analyzer.cpp.i
+
+src/analyzer.s: src/analyzer.cpp.s
+.PHONY : src/analyzer.s
+
+# target to generate assembly for a file
+src/analyzer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\nova_lib.dir\build.make CMakeFiles/nova_lib.dir/src/analyzer.cpp.s
+.PHONY : src/analyzer.cpp.s
+
+src/codegen.obj: src/codegen.cpp.obj
+.PHONY : src/codegen.obj
+
+# target to build an object file
+src/codegen.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\nova_lib.dir\build.make CMakeFiles/nova_lib.dir/src/codegen.cpp.obj
+.PHONY : src/codegen.cpp.obj
+
+src/codegen.i: src/codegen.cpp.i
+.PHONY : src/codegen.i
+
+# target to preprocess a source file
+src/codegen.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\nova_lib.dir\build.make CMakeFiles/nova_lib.dir/src/codegen.cpp.i
+.PHONY : src/codegen.cpp.i
+
+src/codegen.s: src/codegen.cpp.s
+.PHONY : src/codegen.s
+
+# target to generate assembly for a file
+src/codegen.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\nova_lib.dir\build.make CMakeFiles/nova_lib.dir/src/codegen.cpp.s
+.PHONY : src/codegen.cpp.s
+
 src/lexer.obj: src/lexer.cpp.obj
 .PHONY : src/lexer.obj
 
@@ -164,6 +251,102 @@ src/lexer.s: src/lexer.cpp.s
 src/lexer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\nova_lib.dir\build.make CMakeFiles/nova_lib.dir/src/lexer.cpp.s
 .PHONY : src/lexer.cpp.s
+
+src/parser.obj: src/parser.cpp.obj
+.PHONY : src/parser.obj
+
+# target to build an object file
+src/parser.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\nova_lib.dir\build.make CMakeFiles/nova_lib.dir/src/parser.cpp.obj
+.PHONY : src/parser.cpp.obj
+
+src/parser.i: src/parser.cpp.i
+.PHONY : src/parser.i
+
+# target to preprocess a source file
+src/parser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\nova_lib.dir\build.make CMakeFiles/nova_lib.dir/src/parser.cpp.i
+.PHONY : src/parser.cpp.i
+
+src/parser.s: src/parser.cpp.s
+.PHONY : src/parser.s
+
+# target to generate assembly for a file
+src/parser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\nova_lib.dir\build.make CMakeFiles/nova_lib.dir/src/parser.cpp.s
+.PHONY : src/parser.cpp.s
+
+src/vm.obj: src/vm.cpp.obj
+.PHONY : src/vm.obj
+
+# target to build an object file
+src/vm.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\nova_lib.dir\build.make CMakeFiles/nova_lib.dir/src/vm.cpp.obj
+.PHONY : src/vm.cpp.obj
+
+src/vm.i: src/vm.cpp.i
+.PHONY : src/vm.i
+
+# target to preprocess a source file
+src/vm.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\nova_lib.dir\build.make CMakeFiles/nova_lib.dir/src/vm.cpp.i
+.PHONY : src/vm.cpp.i
+
+src/vm.s: src/vm.cpp.s
+.PHONY : src/vm.s
+
+# target to generate assembly for a file
+src/vm.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\nova_lib.dir\build.make CMakeFiles/nova_lib.dir/src/vm.cpp.s
+.PHONY : src/vm.cpp.s
+
+tests/test_analyzer.obj: tests/test_analyzer.cpp.obj
+.PHONY : tests/test_analyzer.obj
+
+# target to build an object file
+tests/test_analyzer.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_analyzer.dir\build.make CMakeFiles/test_analyzer.dir/tests/test_analyzer.cpp.obj
+.PHONY : tests/test_analyzer.cpp.obj
+
+tests/test_analyzer.i: tests/test_analyzer.cpp.i
+.PHONY : tests/test_analyzer.i
+
+# target to preprocess a source file
+tests/test_analyzer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_analyzer.dir\build.make CMakeFiles/test_analyzer.dir/tests/test_analyzer.cpp.i
+.PHONY : tests/test_analyzer.cpp.i
+
+tests/test_analyzer.s: tests/test_analyzer.cpp.s
+.PHONY : tests/test_analyzer.s
+
+# target to generate assembly for a file
+tests/test_analyzer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_analyzer.dir\build.make CMakeFiles/test_analyzer.dir/tests/test_analyzer.cpp.s
+.PHONY : tests/test_analyzer.cpp.s
+
+tests/test_codegen.obj: tests/test_codegen.cpp.obj
+.PHONY : tests/test_codegen.obj
+
+# target to build an object file
+tests/test_codegen.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_codegen.dir\build.make CMakeFiles/test_codegen.dir/tests/test_codegen.cpp.obj
+.PHONY : tests/test_codegen.cpp.obj
+
+tests/test_codegen.i: tests/test_codegen.cpp.i
+.PHONY : tests/test_codegen.i
+
+# target to preprocess a source file
+tests/test_codegen.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_codegen.dir\build.make CMakeFiles/test_codegen.dir/tests/test_codegen.cpp.i
+.PHONY : tests/test_codegen.cpp.i
+
+tests/test_codegen.s: tests/test_codegen.cpp.s
+.PHONY : tests/test_codegen.s
+
+# target to generate assembly for a file
+tests/test_codegen.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_codegen.dir\build.make CMakeFiles/test_codegen.dir/tests/test_codegen.cpp.s
+.PHONY : tests/test_codegen.cpp.s
 
 tests/test_lexer.obj: tests/test_lexer.cpp.obj
 .PHONY : tests/test_lexer.obj
@@ -189,6 +372,30 @@ tests/test_lexer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_lexer.dir\build.make CMakeFiles/test_lexer.dir/tests/test_lexer.cpp.s
 .PHONY : tests/test_lexer.cpp.s
 
+tests/test_parser.obj: tests/test_parser.cpp.obj
+.PHONY : tests/test_parser.obj
+
+# target to build an object file
+tests/test_parser.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_parser.dir\build.make CMakeFiles/test_parser.dir/tests/test_parser.cpp.obj
+.PHONY : tests/test_parser.cpp.obj
+
+tests/test_parser.i: tests/test_parser.cpp.i
+.PHONY : tests/test_parser.i
+
+# target to preprocess a source file
+tests/test_parser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_parser.dir\build.make CMakeFiles/test_parser.dir/tests/test_parser.cpp.i
+.PHONY : tests/test_parser.cpp.i
+
+tests/test_parser.s: tests/test_parser.cpp.s
+.PHONY : tests/test_parser.s
+
+# target to generate assembly for a file
+tests/test_parser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\test_parser.dir\build.make CMakeFiles/test_parser.dir/tests/test_parser.cpp.s
+.PHONY : tests/test_parser.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -198,13 +405,37 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... nova_lib
+	@echo ... test_analyzer
+	@echo ... test_codegen
 	@echo ... test_lexer
+	@echo ... test_parser
+	@echo ... src/analyzer.obj
+	@echo ... src/analyzer.i
+	@echo ... src/analyzer.s
+	@echo ... src/codegen.obj
+	@echo ... src/codegen.i
+	@echo ... src/codegen.s
 	@echo ... src/lexer.obj
 	@echo ... src/lexer.i
 	@echo ... src/lexer.s
+	@echo ... src/parser.obj
+	@echo ... src/parser.i
+	@echo ... src/parser.s
+	@echo ... src/vm.obj
+	@echo ... src/vm.i
+	@echo ... src/vm.s
+	@echo ... tests/test_analyzer.obj
+	@echo ... tests/test_analyzer.i
+	@echo ... tests/test_analyzer.s
+	@echo ... tests/test_codegen.obj
+	@echo ... tests/test_codegen.i
+	@echo ... tests/test_codegen.s
 	@echo ... tests/test_lexer.obj
 	@echo ... tests/test_lexer.i
 	@echo ... tests/test_lexer.s
+	@echo ... tests/test_parser.obj
+	@echo ... tests/test_parser.i
+	@echo ... tests/test_parser.s
 .PHONY : help
 
 

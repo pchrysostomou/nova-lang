@@ -1,0 +1,60 @@
+# ── Build output ──────────────────────────────────────────────────────────────
+build/
+out/
+cmake-build-*/
+
+# ── Compiled binaries ─────────────────────────────────────────────────────────
+*.exe
+*.out
+*.app
+
+# ── Object files & static libs ────────────────────────────────────────────────
+*.o
+*.obj
+*.a
+*.lib
+*.pdb
+
+# ── CMake generated ───────────────────────────────────────────────────────────
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+compile_commands.json
+install_manifest.txt
+_deps/
+
+# ── IDE: Visual Studio ────────────────────────────────────────────────────────
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sdf
+*.opensdf
+*.vcxproj.filters
+*.vcxproj.user
+.vs/
+
+# ── IDE: VSCode ───────────────────────────────────────────────────────────────
+.vscode/
+
+# ── IDE: CLion ────────────────────────────────────────────────────────────────
+.idea/
+cmake-build-debug/
+cmake-build-release/
+
+# ── Windows ───────────────────────────────────────────────────────────────────
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ── Misc ──────────────────────────────────────────────────────────────────────
+*.log
+*.tmp
+*.bak
